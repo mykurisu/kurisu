@@ -1,24 +1,10 @@
-# client
+##  kurisu -- Markdown在线编辑器
 
-## Project setup
-```
-npm install
-```
+>   支持预览、自定义md解析、自定义html样式、一键复制到公众号
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- [x] 支持预览
+- [x] 支持Markdown插件
+- [x] 自定义html样式
+- [x] 一键复制到公众号
+- [x] 自动保存
+- [ ] 导入、导出md文件
