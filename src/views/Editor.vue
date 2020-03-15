@@ -14,7 +14,7 @@
           <span>已存文档</span>
         </a-menu-item>
 
-        <a-sub-menu key="extensions" v-if="isEXshown">
+        <a-sub-menu key="extensions">
           <span slot="title">
             <a-icon type="appstore" />
             <span>插件选择</span>
@@ -140,7 +140,6 @@ export default {
           key: "wesureExtension"
         }
       ],
-      isEXshown: false,
     };
   },
   created() {
@@ -151,9 +150,6 @@ export default {
     });
   },
   mounted() {
-    if (process.env.NODE_ENV === 'development' || this.$route.query.wesure) {
-      this.isEXshown = true
-    }
     this.handlePageInit();
 
     this.saveTimer = setInterval(() => {

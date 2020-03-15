@@ -15,17 +15,9 @@
 </template>
 
 <script>
-// import { Layout } from "ant-design-vue";
-// const { Header, Footer, Content } = Layout;
 
 export default {
   name: "landing",
-  // components: {
-  //   Header,
-  //   Footer,
-  //   Content,
-  //   Layout
-  // }
   methods: {
     handleEnterEditor() {
       this.$router.push('/editor')
@@ -46,7 +38,7 @@ export default {
     background-repeat: no-repeat;
     background-position: center;
     background-image: url("https://blog-1252307419.cos.ap-beijing.myqcloud.com/markdown/md-now-banner-bg.jpg");
-    // animation: bg 10s infinite;
+    animation: bg 10s infinite;
   }
 
   @keyframes bg {
