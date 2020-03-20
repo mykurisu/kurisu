@@ -96,6 +96,7 @@
 
 <script>
 import marked from "marked";
+import DOMPurify from 'dompurify';
 import Clipboard from "clipboard";
 import localforage from "localforage";
 import { Menu, Icon, message, Spin, Modal, List, Empty } from "ant-design-vue";
@@ -197,12 +198,12 @@ export default {
       this.codeValue = value;
       if (this.selectedExtension) {
         this.htmlValue = marked(
-          value,
+          DOMPurify.sanitize(value),
           { renderer: this.selectedExtension.renderer },
           this.selectedExtension.parseCallback
         );
       } else {
-        this.htmlValue = marked(value);
+        this.htmlValue = marked(DOMPurify.sanitize(value));
       }
     },
 

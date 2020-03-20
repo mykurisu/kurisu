@@ -1,4 +1,4 @@
-const md = `# 欢迎使用 Madan 编辑器
+const md = `# 欢迎使用 Kurisu 编辑器
 
 ##  使用指南
 
