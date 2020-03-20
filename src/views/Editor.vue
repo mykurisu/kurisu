@@ -22,7 +22,7 @@
           <a-menu-item
             v-for="e in extensionList"
             :key="e.key"
-            @click="handleExtensionChange(e.key)"
+            @click="handleExtensionChange(e)"
           >
             <a-icon type="check-circle" v-if="extensionName === e.key" />
             <span>{{e.title}}</span>
@@ -142,7 +142,8 @@ export default {
         },
         {
           title: "Labmem",
-          key: "labmemExtension"
+          key: "labmemExtension",
+          onlyStyle: true
         },
       ],
     };
@@ -222,10 +223,14 @@ export default {
     },
 
     handleExtensionChange(ex) {
-      this.extensionName = ex;
+      if (!ex) return;
+
+      const { key = '', onlyStyle = false } = ex
+      this.extensionName = key;
       this.selectedExtension = null;
-      if (ex) {
-        this.selectedExtension = require(`../extensions/${ex}/index`).default;
+
+      if (key && !onlyStyle) {
+        this.selectedExtension = require(`../extensions/${ex.key}/index`).default;
         this.handleChange({ value: this.codeValue });
       }
     },
@@ -357,6 +362,8 @@ export default {
 .preview {
   width: 40%;
   height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .sider {

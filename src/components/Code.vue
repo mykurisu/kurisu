@@ -29,7 +29,8 @@ export default {
         mode: "markdown",
         theme: "monokai",
         lineNumbers: true,
-        line: true
+        line: true,
+        lineWrapping: true
       }
     };
   },
