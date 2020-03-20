@@ -197,13 +197,13 @@ export default {
     handleChange({ value }) {
       this.codeValue = value;
       if (this.selectedExtension) {
-        this.htmlValue = marked(
-          DOMPurify.sanitize(value),
+        this.htmlValue = DOMPurify.sanitize(marked(
+          value,
           { renderer: this.selectedExtension.renderer },
           this.selectedExtension.parseCallback
-        );
+        ));
       } else {
-        this.htmlValue = marked(DOMPurify.sanitize(value));
+        this.htmlValue = DOMPurify.sanitize(marked(value));
       }
     },
 
