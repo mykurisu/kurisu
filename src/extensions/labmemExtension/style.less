@@ -1,0 +1,54 @@
+.labmemExtension {
+    font-size: 16px;
+    table,table tr th, table tr td { border:1px solid #eee; }
+
+    h1, h2, h3, h4, h5 {
+        color: rgb(30, 80, 162);
+    }
+
+    strong {
+        color: rgb(165, 154, 202);
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    p {
+        font-size: 16px;
+        white-space: pre-line;
+        line-height: 30px;
+        color: #4a4a4a;
+        margin: 5px 0;
+    }
+
+    blockquote {
+        padding: 6px 15px;
+        font-size: 14px;
+        margin-left: 0;
+        color: #819198;
+        border-left: 6px solid #dce6f0;
+        background: #f2f7fb;
+        p {
+            font-size: 14px;
+        }
+    }
+
+    ul {
+        padding-inline-start: 0;
+        list-style-type: none;
+        li {
+            position: relative;
+            line-height: 24px;
+            &::before {
+                content: '';
+                line-height: 24px;
+                width: 6px;
+                height: 6px;
+                margin: 0 8px 3px 0;
+                background-color: rgb(30, 80, 162);
+                display: inline-block;
+            }
+        }
+    }
+}

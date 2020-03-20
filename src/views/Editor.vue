@@ -139,7 +139,11 @@ export default {
         {
           title: "微保技术",
           key: "wesureExtension"
-        }
+        },
+        {
+          title: "Labmem",
+          key: "labmemExtension"
+        },
       ],
     };
   },
