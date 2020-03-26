@@ -1,6 +1,11 @@
 import marked from 'marked'
 
 
+const FOOTER = `
+<img src="https://resource.wesure100.com/AT-Config/config/9fd6c58183c45fd0c4877cb034d19b7f.png" />
+
+<img src="https://resource.wesure100.com/AT-Config/config/501958c621203be1c789abbfb0938622.png" />
+`
 const renderer = new marked.Renderer()
 
 renderer.heading = function (text, level) {
@@ -20,6 +25,7 @@ const parseCallback = (error, parseResult) => {
     parseResult = parseResult.replace(/{{h1Title}}/g, () => {
         return ++h1Title
     })
+    parseResult += FOOTER
     return parseResult
 }
 
