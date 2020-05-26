@@ -17,6 +17,26 @@ renderer.heading = function (text, level) {
     }
 }
 
+renderer.text = function (text) {
+    const l = text.split('\n')
+    return l.map((t) => authorFormat(t)).join('\n')
+}
+
+function authorFormat(text) {
+    const reg = new RegExp(/\$\$(.+)\$\$/)
+    if (reg.test(text)) {
+        const regMatchs = text.match(reg)
+        if (regMatchs.length > 0) {
+            const regText = regMatchs[0].replace(/\$\$/g, '')
+            return `<p class="author">${regText}</p>`
+        } else {
+            return text
+        }
+    } else {
+        return text
+    }
+}
+
 const parseCallback = (error, parseResult) => {
     if (error) {
         return ''
