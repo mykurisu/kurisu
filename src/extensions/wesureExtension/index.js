@@ -5,6 +5,8 @@ const FOOTER = `
 <img src="https://resource.wesure100.com/AT-Config/config/9fd6c58183c45fd0c4877cb034d19b7f.png" />
 
 <img src="https://resource.wesure100.com/AT-Config/config/501958c621203be1c789abbfb0938622.png" />
+
+<img src="https://resource.wesure100.com/AT-Config/config/c4ed6fb642e25c9735f71718c7ac3593.gif" />
 `
 const renderer = new marked.Renderer()
 
