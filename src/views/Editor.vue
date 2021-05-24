@@ -1,6 +1,6 @@
 <template>
   <div id="editor">
-    <div class="sider" :style="{ flex: collapsed ? '' : '1' }">
+    <div class="sider" :style="{ width: collapsed ? '80px' : '200px' }">
       <div class="logo" @click="this.handleHome" v-if="false"></div>
 
       <a-menu :inlineCollapsed="collapsed" mode="inline">
@@ -25,7 +25,7 @@
             @click="handleExtensionChange(e)"
           >
             <a-icon type="check-circle" v-if="extensionName === e.key" />
-            <span>{{e.title}}</span>
+            <span>{{ e.title }}</span>
           </a-menu-item>
         </a-sub-menu>
 
@@ -34,9 +34,19 @@
           <span>预览界面</span>
         </a-menu-item>
 
-        <a-menu-item key="3" id="copy" data-clipboard-target="#preview" v-if="previewShow">
+        <a-menu-item
+          key="3"
+          id="copy"
+          data-clipboard-target="#preview"
+          v-if="previewShow"
+        >
           <a-icon type="copy" />
           <span>复制到公众号</span>
+        </a-menu-item>
+
+        <a-menu-item key="4" id="export" @click="handleMDExport">
+          <a-icon type="read" />
+          <span>导出.md文件</span>
         </a-menu-item>
       </a-menu>
 
@@ -46,7 +56,12 @@
       </div>
     </div>
 
-    <a-spin style="width: 100%;flex: 6;" :spinning="!inited">
+    <a-spin
+      :style="{
+        width: collapsed ? 'calc(100vw - 80px)' : 'calc(100vw - 200px)',
+      }"
+      :spinning="!inited"
+    >
       <div class="edit_container">
         <div class="bar" v-if="false">
           <div class="bar-item bar-item-active">
@@ -80,12 +95,21 @@
       </div>
     </a-spin>
 
-    <a-modal title="已存文档列表" :visible="isStoreListShow" :footer="null" @cancel="handleStoreListHide">
-      <a-list bordered v-if="storeList.length > 0" style="height: 400px;overflow-y: auto">
+    <a-modal
+      title="已存文档列表"
+      :visible="isStoreListShow"
+      :footer="null"
+      @cancel="handleStoreListHide"
+    >
+      <a-list
+        bordered
+        v-if="storeList.length > 0"
+        style="height: 400px; overflow-y: auto"
+      >
         <a-list-item v-for="(store, n) in storeList" :key="`article_${n}`">
           <div>
-            <p>文章内容：{{store.title}}</p>
-            <p>保存时间：{{new Date(store.time).toLocaleString()}}</p>
+            <p>文章内容：{{ store.title }}</p>
+            <p>保存时间：{{ new Date(store.time).toLocaleString() }}</p>
           </div>
         </a-list-item>
       </a-list>
@@ -96,14 +120,14 @@
 
 <script>
 import marked from "marked";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 import Clipboard from "clipboard";
 import localforage from "localforage";
 import { Menu, Icon, message, Spin, Modal, List, Empty } from "ant-design-vue";
 import Code from "../components/Code";
 import Preview from "../components/Preview";
 
-import Example from '../assets/example'
+import Example from "../assets/example";
 
 export default {
   name: "editor",
@@ -118,7 +142,7 @@ export default {
     "a-modal": Modal,
     "a-list": List,
     "a-list-item": List.Item,
-    "a-empty": Empty
+    "a-empty": Empty,
   },
   data() {
     return {
@@ -134,29 +158,31 @@ export default {
       extensionList: [
         {
           title: "默认",
-          key: ""
+          key: "",
         },
         {
           title: "微保技术",
-          key: "wesureExtension"
+          key: "wesureExtension",
         },
         {
           title: "Labmem",
           key: "labmemExtension",
-          onlyStyle: true
+          onlyStyle: true,
         },
       ],
     };
   },
   created() {
     const clipboard = new Clipboard("#copy");
-    clipboard.on("success", e => {
+    clipboard.on("success", (e) => {
       message.success("复制成功");
       e.clearSelection();
     });
   },
   mounted() {
     this.handlePageInit();
+
+    document.body.addEventListener('beforeunload', () => '确定离开当前页面吗？')
 
     this.saveTimer = setInterval(() => {
       this.handleSave();
@@ -170,14 +196,14 @@ export default {
       const { articleID = "" } = this.$route.params;
 
       if (!articleID || articleID === "newArticle") {
-        this.codeValue = Example
+        this.codeValue = Example;
         this.htmlValue = marked(Example);
-        return (this.inited = true)
+        return (this.inited = true);
       }
 
       localforage.getItem(articleID).then((res) => {
         if (res) {
-          const { value } = res
+          const { value } = res;
           this.handleChange({ value });
           message.success("草稿导入成功");
         }
@@ -194,19 +220,21 @@ export default {
     },
 
     handleAdd() {
-      this.codeValue = Example
-      this.handleChange({ value: Example })
-      this.$router.replace("/editor/newArticle");
+      this.codeValue = Example;
+      this.handleChange({ value: Example });
+      this.$router.replace("/newArticle");
     },
 
     handleChange({ value }) {
       this.codeValue = value;
       if (this.selectedExtension) {
-        this.htmlValue = DOMPurify.sanitize(marked(
-          value,
-          { renderer: this.selectedExtension.renderer },
-          this.selectedExtension.parseCallback
-        ));
+        this.htmlValue = DOMPurify.sanitize(
+          marked(
+            value,
+            { renderer: this.selectedExtension.renderer },
+            this.selectedExtension.parseCallback
+          )
+        );
       } else {
         this.htmlValue = DOMPurify.sanitize(marked(value));
       }
@@ -214,7 +242,7 @@ export default {
 
     handleFocus() {
       if (this.$route.params.articleID === "newArticle") {
-        this.$router.replace(`/editor/${btoa(`${Date.now()}_md`)}`);
+        this.$router.replace(`/${btoa(`${Date.now()}_md`)}`);
       }
     },
 
@@ -225,7 +253,7 @@ export default {
     handleExtensionChange(ex) {
       if (!ex) return;
 
-      const { key = '', onlyStyle = false } = ex
+      const { key = "", onlyStyle = false } = ex;
       this.extensionName = key;
       this.selectedExtension = null;
 
@@ -247,7 +275,7 @@ export default {
       const store = {
         title: this.codeValue.substring(0, 6),
         value: this.codeValue,
-        time: Date.now()
+        time: Date.now(),
       };
       localforage.setItem(articleID, store, () =>
         message.success("已自动保存")
@@ -255,153 +283,44 @@ export default {
     },
 
     handleGetStore() {
-      const _this = this
+      const _this = this;
       localforage
         .keys()
-        .then(function(keys) {
-          _this.handleGetData(keys)
-          _this.isStoreListShow = true
+        .then(function (keys) {
+          _this.handleGetData(keys);
+          _this.isStoreListShow = true;
         })
-        .catch(function(err) {
+        .catch(function (err) {
           console.log(err);
         });
     },
 
     handleGetData(keys) {
-      if (!keys || keys.length <= 0) return
-      const key = keys[0]
+      if (!keys || keys.length <= 0) return;
+      const key = keys[0];
       localforage.getItem(key, (err, value) => {
-        this.storeList.push(value)
-        keys.splice(0, 1)
-        this.handleGetData(keys)
-      })
+        this.storeList.push(value);
+        keys.splice(0, 1);
+        this.handleGetData(keys);
+      });
     },
 
     handleStoreListHide() {
       this.isStoreListShow = false;
-    }
-  }
+    },
+
+    handleMDExport() {
+      const urlObject = window.URL || window.webkitURL || window;
+      const export_blob = new Blob([this.codeValue]);
+      const save_link = document.createElement('a');
+      save_link.href = urlObject.createObjectURL(export_blob);
+      save_link.download = `${this.$route.params.articleID}.md`;
+      save_link.click();
+    },
+  },
 };
 </script>
 
 <style scoped>
-#editor {
-  width: 100%;
-  display: flex;
-}
-
-.edit_container {
-  width: 100%;
-  height: 100vh;
-}
-
-.bar {
-  width: 100%;
-  height: 30px;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-}
-
-.bar-item {
-  padding: 0 40px 0 20px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: white;
-  position: relative;
-}
-
-.bar-item-delete {
-  position: absolute;
-  right: 10px;
-  top: 0;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bar-item-add {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin-left: 20px;
-}
-
-.bar-item-add:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.bar-item-active {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.edit_area {
-  flex: 6;
-  width: 100%;
-  height: 100vh;
-  /* height: calc(100vh - 30px); */
-  display: flex;
-  overflow: hidden;
-}
-
-.code-full {
-  width: 100%;
-}
-
-.code-normal {
-  width: 60%;
-}
-
-.preview {
-  width: 40%;
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-.sider {
-  max-width: 200px;
-  height: 100vh;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  user-select: none;
-}
-
-.sider .bottom {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #eeeeee;
-  position: absolute;
-  z-index: 5;
-  bottom: 0;
-  left: 0;
-}
-
-.logo {
-  width: 100%;
-  height: 60px;
-  margin-bottom: 16px;
-  background-color: aliceblue;
-}
-
-.spin {
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+@import "../assets/styles.css";
 </style>

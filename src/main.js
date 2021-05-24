@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import App from './App.vue'
-import Landing from './views/Landing.vue'
 import Editor from './views/Editor.vue'
 
 Vue.config.productionTip = false
@@ -13,12 +12,9 @@ const router = new VueRouter({
     mode: 'history',
     routes: [{
         path: '/',
-        component: Landing
+        redirect: '/newArticle'
     }, {
-        path: '/editor',
-        redirect: '/editor/newArticle'
-    }, {
-        path: '/editor/:articleID',
+        path: '/:articleID',
         component: Editor
     }]
 })
